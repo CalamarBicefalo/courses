@@ -126,11 +126,19 @@ public class PercolationTest {
     }
 
     @Test
+    public void singleCellPercolates() throws Exception {
+        Percolation percolation = new Percolation(1);
+        assertFalse(percolation.percolates());
+        percolation.open(1,1);
+        assertTrue(percolation.percolates());
+    }
+
+    @Test
     public void simpleConnectedColumnPercolates() throws Exception {
         Percolation percolation = new Percolation(3);
         percolation.open(1,2);
-        percolation.open(2,2);
-        percolation.open(3,2);
+        percolation.open(2, 2);
+        percolation.open(3, 2);
         assertTrue(percolation.percolates());
     }
 
@@ -163,6 +171,46 @@ public class PercolationTest {
         assertFalse(percolation.percolates());
         percolation.open(8, 5);
         assertTrue(percolation.percolates());
+    }
+
+    @Test
+    public void realScenario3() throws Exception {
+        Percolation percolation = new Percolation(3);
+        percolation.open(1,3);
+        assertFalse(percolation.percolates());
+        percolation.open(2,3);
+        assertFalse(percolation.percolates());
+        percolation.open(3,3);
+        assertTrue(percolation.percolates());
+        percolation.open(3,1);
+        assertFalse(percolation.isFull(3,1));
+        assertTrue(percolation.percolates());
+        percolation.open(2,1);
+        percolation.open(1,1);
+        assertTrue(percolation.percolates());
+    }
+
+    @Test
+    public void realScenario7() throws Exception {
+        Percolation percolation = new Percolation(7);
+
+        percolation.open(6,1);
+        percolation.open(7,1);
+        percolation.open(7,2);
+        percolation.open(7,4);
+        percolation.open(1,1);
+        percolation.open(1,5);
+        percolation.open(2,5);
+        percolation.open(3,5);
+        percolation.open(4,5);
+        percolation.open(5,5);
+        percolation.open(6,5);
+        percolation.open(7,5);
+        assertFalse(percolation.isFull(6,1));
+        percolation.open(2,1);
+        percolation.open(4,1);
+        percolation.open(5,1);
+        percolation.open(3,1);
     }
 
 
