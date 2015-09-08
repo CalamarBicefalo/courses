@@ -1,5 +1,10 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
+/**
+ *
+ * @author José Carlos Valero
+ * @since September 08, 2015
+ */
 public class Percolation {
 
     private final static int TOP_VIRTUAL_NODE_INDEX = 0;
