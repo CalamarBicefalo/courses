@@ -27,17 +27,17 @@ public class PercolationTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void openWithZeroIThrowsException() throws Exception {
         Percolation percolation = new Percolation(5);
-        percolation.open(0,3);
+        percolation.open(0, 3);
     }
     @Test(expected = IndexOutOfBoundsException.class)
     public void openWithZeroJThrowsException() throws Exception {
         Percolation percolation = new Percolation(5);
-        percolation.open(3,0);
+        percolation.open(3, 0);
     }
     @Test(expected = IndexOutOfBoundsException.class)
     public void openWithHighIThrowsException() throws Exception {
         Percolation percolation = new Percolation(5);
-        percolation.open(6,3);
+        percolation.open(6, 3);
     }
     @Test(expected = IndexOutOfBoundsException.class)
     public void openWithHighJThrowsException() throws Exception {
@@ -84,6 +84,86 @@ public class PercolationTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void isOpenWithHighJThrowsException() throws Exception {
         Percolation percolation = new Percolation(5);
-        percolation.isOpen(3,6);
+        percolation.isOpen(3, 6);
     }
+
+    @Test
+    public void allCellsAreClosed() throws Exception {
+        Percolation percolation = new Percolation(5);
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 5; j++) {
+                assertFalse(percolation.isOpen(i, j));
+            }
+        }
+    }
+
+    @Test
+    public void openCellIsOpen() throws Exception {
+        Percolation percolation = new Percolation(5);
+        percolation.open(2,2);
+        assertTrue(percolation.isOpen(2,2));
+    }
+
+    @Test
+    public void isFullSingleCell() throws Exception {
+        Percolation percolation = new Percolation(5);
+        percolation.open(1,2);
+        assertTrue(percolation.isFull(1, 2));
+        assertFalse(percolation.isFull(1, 1));
+        assertFalse(percolation.isFull(1, 3));
+    }
+
+    @Test
+    public void isNotFullSingleCell() throws Exception {
+        Percolation percolation = new Percolation(5);
+        percolation.open(2, 2);
+        assertFalse(percolation.isFull(2, 2));
+    }
+    @Test
+    public void emptyGridDoesNotPercolate() throws Exception {
+        Percolation percolation = new Percolation(5);
+        assertFalse(percolation.percolates());
+    }
+
+    @Test
+    public void simpleConnectedColumnPercolates() throws Exception {
+        Percolation percolation = new Percolation(3);
+        percolation.open(1,2);
+        percolation.open(2,2);
+        percolation.open(3,2);
+        assertTrue(percolation.percolates());
+    }
+
+    @Test
+    public void complexConnectedColumnPercolates() throws Exception {
+        Percolation percolation = new Percolation(8);
+        percolation.open(1,2);
+        assertFalse(percolation.percolates());
+        percolation.open(1,3);
+        assertFalse(percolation.percolates());
+        percolation.open(2,3);
+        assertFalse(percolation.percolates());
+        percolation.open(3,3);
+        assertFalse(percolation.percolates());
+        percolation.open(3,2);
+        assertFalse(percolation.percolates());
+        percolation.open(4,2);
+        assertFalse(percolation.percolates());
+        percolation.open(5,2);
+        assertFalse(percolation.percolates());
+        percolation.open(5,3);
+        assertFalse(percolation.percolates());
+        percolation.open(5,4);
+        assertFalse(percolation.percolates());
+        percolation.open(5,5);
+        assertFalse(percolation.percolates());
+        percolation.open(6,5);
+        assertFalse(percolation.percolates());
+        percolation.open(7,5);
+        assertFalse(percolation.percolates());
+        percolation.open(8, 5);
+        assertTrue(percolation.percolates());
+    }
+
+
 }
