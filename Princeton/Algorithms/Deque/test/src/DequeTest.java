@@ -1,5 +1,6 @@
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
@@ -133,6 +134,68 @@ public class DequeTest {
         assertThat(deque.size(), is(1));
         assertEquals(deque.removeFirst(), second);
         assertTrue(deque.isEmpty());
+    }
+
+    @Test
+    public void testIteratorIsNotNull() throws Exception {
+        assertNotNull(new Deque<Object>().iterator());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIteratorDoesNotSupportRemove() throws Exception {
+        new Deque<Object>().iterator().remove();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIteratorThrowsNSEEIfNoMoreElementsAvailable() throws Exception {
+        new Deque<Object>().iterator().next();
+    }
+
+    @Test
+    public void testEmptyIteratorHasNotNext() throws Exception {
+        assertFalse(new Deque<Object>().iterator().hasNext());
+    }
+
+    @Test
+    public void testNonEmptyIteratorHasNext() throws Exception {
+        Deque<Object> deque = new Deque<Object>();
+        deque.addLast(new Object());
+        assertTrue(deque.iterator().hasNext());
+    }
+
+    @Test
+    public void testIteratorIteratesAsExpected() throws Exception {
+        Deque<Object> deque = new Deque<Object>();
+        Object first = new Object();
+        Object second = new Object();
+        deque.addFirst(second);
+        deque.addFirst(first);
+        Iterator<Object> iterator = deque.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(first,iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(second, iterator.next());
+        assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    public void testIteratorIteratesAsExpectedHavingManipulatedTheDeque() throws Exception {
+        Deque<Object> deque = new Deque<Object>();
+        Object first = new Object();
+        Object second = new Object();
+        deque.addFirst(second);
+        deque.addFirst(first);
+
+        deque.addFirst(new Object());
+        deque.addLast(new Object());
+        deque.removeFirst();
+        deque.removeLast();
+        Iterator<Object> iterator = deque.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(first, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(second, iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
 
