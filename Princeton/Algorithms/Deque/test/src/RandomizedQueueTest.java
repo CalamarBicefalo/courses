@@ -68,6 +68,11 @@ public class RandomizedQueueTest {
         new RandomizedQueue<Object>().dequeue();
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testThrowsNSEESamplingFromEmptyQueue() throws Exception {
+        new RandomizedQueue<Object>().sample();
+    }
+
     @Test
     public void testRandomizedQueueReturnsElements() throws Exception {
         RandomizedQueue<Object> queue = new RandomizedQueue<Object>();
@@ -198,4 +203,26 @@ public class RandomizedQueueTest {
         assertEquals(0,objectList.size());
     }
 
+    @Test
+    public void testScenario2() throws Exception {
+            RandomizedQueue<Object> rq = new RandomizedQueue<Object>();
+            rq.enqueue(966);
+            rq.isEmpty();
+            rq.dequeue();
+            rq.isEmpty();
+            rq.isEmpty();
+            rq.isEmpty();
+            rq.size();
+            rq.size();
+            rq.enqueue(947);
+    }
+
+    @Test
+    public void testScenario6Loitering() throws Exception {
+        RandomizedQueue<Object> rq = new RandomizedQueue<Object>();
+        rq.enqueue(1);
+        rq.enqueue(2);
+        rq.dequeue();
+        rq.dequeue();
+    }
 }

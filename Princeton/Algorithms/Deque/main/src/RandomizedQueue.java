@@ -1,26 +1,20 @@
-import edu.princeton.cs.algs4.RandomSeq;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * @author José Carlos Valero
  * @since 20/09/15
  */
-public class RandomizedQueue<T> implements Iterable<T> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private T[] data;
+    private Item[] data;
     private int size = 0;
 
     public RandomizedQueue() {
-        data = (T[]) new Object[10];
+        data = (Item[]) new Object[1];
     }
 
     public boolean isEmpty() {
@@ -31,38 +25,42 @@ public class RandomizedQueue<T> implements Iterable<T> {
         return size;
     }
 
-    public void enqueue(T item) {
+    public void enqueue(Item item) {
         checkItem(item);
-        if (data.length == size) {
+        if (size == data.length) {
             growArray();
-        }
-        if (size < (data.length / 3)) {
-            reduceArray();
         }
         data[size] = item;
         size++;
     }
 
     private void reduceArray() {
-        this.data = Arrays.copyOf(data, data.length / 2);
+        this.data = Arrays.copyOf(data, (data.length / 2));
     }
 
     private void growArray() {
-        this.data = Arrays.copyOf(data, data.length * 2);
+        this.data = Arrays.copyOf(data, (data.length * 2) + 1);
     }
 
-    private void checkItem(T item) {
+    private void checkItem(Item item) {
         if (item == null) {
             throw new NullPointerException();
         }
     }
 
-    public T dequeue() {
+    public Item dequeue() {
         checkStatusToRemove();
         int i = StdRandom.uniform(size);
-        T target = data[i];
+        Item target = data[i];
         data[i] = data[size - 1];
+        data[size - 1] = null;
         size--;
+        if (size <= (data.length / 4)) {
+            reduceArray();
+        }
+        if(size == 0){
+            this.data = (Item[]) new Object[1];
+        }
         return target;
     }
 
@@ -72,15 +70,16 @@ public class RandomizedQueue<T> implements Iterable<T> {
         }
     }
 
-    public T sample() {
+    public Item sample() {
+        checkStatusToRemove();
         return data[StdRandom.uniform(size)];
     }
 
-    public Iterator<T> iterator() {
+    public Iterator<Item> iterator() {
         return new QueueIterator();
     }
 
-    private class QueueIterator implements Iterator<T> {
+    private class QueueIterator implements Iterator<Item> {
         int[] index;
         int next = 0;
 
@@ -97,7 +96,6 @@ public class RandomizedQueue<T> implements Iterable<T> {
                 index[r] = i;
                 index[i] = aux;
             }
-            System.out.print(Arrays.toString(index));
             return index;
         }
 
@@ -107,7 +105,7 @@ public class RandomizedQueue<T> implements Iterable<T> {
         }
 
         @Override
-        public T next() {
+        public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
             return data[index[next++]];
         }

@@ -198,5 +198,13 @@ public class DequeTest {
         assertFalse(iterator.hasNext());
     }
 
+    @Test
+    public void testScenario11() throws Exception {
+        Deque<Object> deque = new Deque<Object>();
+        deque.addFirst(1);
+        deque.removeLast();
+        assertEquals(0, deque.size());
+        assertFalse(deque.iterator().hasNext());
+    }
 
 }

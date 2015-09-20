@@ -3,26 +3,25 @@ import java.util.NoSuchElementException;
 
 /**
  * Deque implementation where
- * <p/>
+ * <p>
  * Performance requirements.
  * Your deque implementation must support each deque operation in constant worst-case time.
  * A deque containing N items must use at most 48N + 192 bytes of memory.
  * and use space proportional to the number of items currently in the deque.
  * Additionally, your iterator implementation must support each operation (including construction)
  * in constant worst-case time.
- * <p/>
+ * <p>
  * Because of the fact that worst-case time needs to be constant, and we are hitting always the top
  * or the bottom of the queue, the best data structure is a DoubleLinkedList.
  *
- * @param <T>
- *
+ * @param <Item>
  * @author José Carlos Valero Sánchez
  * @since 19 September 2015
  */
-public class Deque<T> implements Iterable<T> {
+public class Deque<Item> implements Iterable<Item> {
 
     private int size;
-    private Node<T> first, last;
+    private Node<Item> first, last;
 
     public Deque() {
     }
@@ -38,10 +37,10 @@ public class Deque<T> implements Iterable<T> {
         return size;
     }
 
-    public void addFirst(T item) {
+    public void addFirst(Item item) {
         checkItem(item);
         size++;
-        Node<T> newFirst = new Node<T>(item, this.first, null);
+        Node<Item> newFirst = new Node<Item>(item, this.first, null);
         if (first != null) {
             first.previous = newFirst;
         }
@@ -51,10 +50,10 @@ public class Deque<T> implements Iterable<T> {
         }
     }
 
-    public void addLast(T item) {
+    public void addLast(Item item) {
         checkItem(item);
         size++;
-        Node<T> newLast = new Node<T>(item, null, this.last);
+        Node<Item> newLast = new Node<Item>(item, null, this.last);
         if (last != null) {
             last.next = newLast;
         }
@@ -64,30 +63,34 @@ public class Deque<T> implements Iterable<T> {
         }
     }
 
-    private void checkItem(T item) {
+    private void checkItem(Item item) {
         if (item == null) {
             throw new NullPointerException();
         }
     }
 
-    public T removeFirst() {
+    public Item removeFirst() {
         checkStatusToRemove();
         size--;
-        Node<T> first = this.first;
+        Node<Item> first = this.first;
         this.first = first.next;
         if (this.first != null) {
             this.first.previous = null;
+        } else {
+            this.last = null;
         }
         return first._this;
     }
 
-    public T removeLast() {
+    public Item removeLast() {
         checkStatusToRemove();
         size--;
-        Node<T> last = this.last;
+        Node<Item> last = this.last;
         this.last = last.previous;
         if (this.last != null) {
             this.last.next = null;
+        } else {
+            this.first = null;
         }
         return last._this;
     }
@@ -98,7 +101,7 @@ public class Deque<T> implements Iterable<T> {
         }
     }
 
-    public Iterator<T> iterator() {
+    public Iterator<Item> iterator() {
         return new DequeIterator();
     }
 
@@ -114,9 +117,9 @@ public class Deque<T> implements Iterable<T> {
         }
     }
 
-    private class DequeIterator implements Iterator<T> {
+    private class DequeIterator implements Iterator<Item> {
 
-        private Node<T> next;
+        private Node<Item> next;
 
         public DequeIterator() {
             this.next = Deque.this.first;
@@ -128,9 +131,9 @@ public class Deque<T> implements Iterable<T> {
         }
 
         @Override
-        public T next() {
+        public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            T cNext = next._this;
+            Item cNext = next._this;
             next = next.next;
             return cNext;
         }
