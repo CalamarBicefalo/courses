@@ -33,22 +33,22 @@ public class RandomizedQueue<T> implements Iterable<T> {
 
     public void enqueue(T item) {
         checkItem(item);
-        if(data.length == size){
+        if (data.length == size) {
             growArray();
         }
-        if(size < (data.length/3)){
+        if (size < (data.length / 3)) {
             reduceArray();
         }
-        data[size]=item;
+        data[size] = item;
         size++;
     }
 
     private void reduceArray() {
-        this.data = Arrays.copyOf(data,data.length/2);
+        this.data = Arrays.copyOf(data, data.length / 2);
     }
 
     private void growArray() {
-        this.data = Arrays.copyOf(data,data.length*2);
+        this.data = Arrays.copyOf(data, data.length * 2);
     }
 
     private void checkItem(T item) {
@@ -61,7 +61,7 @@ public class RandomizedQueue<T> implements Iterable<T> {
         checkStatusToRemove();
         int i = StdRandom.uniform(size);
         T target = data[i];
-        data[i] = data[size-1];
+        data[i] = data[size - 1];
         size--;
         return target;
     }
@@ -88,14 +88,14 @@ public class RandomizedQueue<T> implements Iterable<T> {
             this.index = randomSequence(RandomizedQueue.this.size);
         }
 
-        private int[] randomSequence(int to){
+        private int[] randomSequence(int to) {
             int[] index = new int[to];
             for (int i = 0; i < to; i++) {
-                int r = StdRandom.uniform(i+1);
-                index[i]=i;
+                int r = StdRandom.uniform(i + 1);
+                index[i] = i;
                 int aux = index[r];
-                index[r]=i;
-                index[i]=aux;
+                index[r] = i;
+                index[i] = aux;
             }
             System.out.print(Arrays.toString(index));
             return index;
