@@ -15,6 +15,9 @@ import java.util.NoSuchElementException;
  * or the bottom of the queue, the best data structure is a DoubleLinkedList.
  *
  * @param <T>
+ *
+ * @author José Carlos Valero Sánchez
+ * @since 19 September 2015
  */
 public class Deque<T> implements Iterable<T> {
 
