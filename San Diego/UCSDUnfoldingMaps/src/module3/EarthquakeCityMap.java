@@ -5,6 +5,7 @@ import java.util.ArrayList;
 //import java.util.Collections;
 //import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //Processing library
 import processing.core.PApplet;
@@ -49,6 +50,11 @@ public class EarthquakeCityMap extends PApplet {
 	//feed with magnitude 2.5+ Earthquakes
 	private String earthquakesURL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.atom";
 
+	private int yellow = color(255, 255, 0);
+	private int blue = color(0,0, 255);
+	private int red = color(255, 0, 0);
+	private int green = color(0, 255, 0);
+
 	
 	public void setup() {
 		size(950, 600, OPENGL);
@@ -85,9 +91,10 @@ public class EarthquakeCityMap extends PApplet {
 	    
 	    // Here is an example of how to use Processing's color method to generate 
 	    // an int that represents the color yellow.  
-	    int yellow = color(255, 255, 0);
-	    
-	    //TODO: Add code here as appropriate
+
+
+		map.addMarkers(earthquakes.stream().map(this::createMarker).collect(Collectors.toList()));
+
 	}
 		
 	// A suggested helper method that takes in an earthquake feature and 
@@ -96,7 +103,25 @@ public class EarthquakeCityMap extends PApplet {
 	private SimplePointMarker createMarker(PointFeature feature)
 	{
 		// finish implementing and use this method, if it helps.
-		return new SimplePointMarker(feature.getLocation());
+		SimplePointMarker simplePointMarker = new SimplePointMarker(feature.getLocation());
+		float magnitude = Float.parseFloat(feature.getProperty("magnitude").toString());
+		float radius = 0;
+		int color = 0;
+		if(magnitude < 4){
+			radius = 4f;
+			color = blue;
+		}
+		if(magnitude >= 4 && magnitude <= 4.9){
+			radius = 8f;
+			color = yellow;
+		}
+		if(magnitude > 4.9){
+			radius = 12f;
+			color = red;
+		}
+		simplePointMarker.setRadius(radius);
+		simplePointMarker.setColor(color);
+		return simplePointMarker;
 	}
 	
 	public void draw() {
@@ -108,9 +133,25 @@ public class EarthquakeCityMap extends PApplet {
 
 	// helper method to draw key in GUI
 	// TODO: Implement this method to draw the key
-	private void addKey() 
-	{	
-		// Remember you can use Processing's graphics methods here
-	
+	private void addKey() {
+		fill(255, 250, 240);
+		rect(25, 50, 150, 250);
+
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Earthquake Key", 50, 75);
+
+		fill(color(255, 0, 0));
+		ellipse(50, 125, 15, 15);
+		fill(color(255, 255, 0));
+		ellipse(50, 175, 10, 10);
+		fill(color(0, 0, 255));
+		ellipse(50, 225, 5, 5);
+
+		fill(0, 0, 0);
+		text("5.0+ Magnitude", 75, 125);
+		text("4.0+ Magnitude", 75, 175);
+		text("Below 4.0", 75, 225);
 	}
 }
